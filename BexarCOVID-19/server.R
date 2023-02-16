@@ -11,11 +11,21 @@ library(shiny)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+  output$decol<-renderUI({
+    yvals<-input$yvals
+    ylables<-paste0('ycol_',yvals)
+    selectInput("ycols4", "Colors",
+                choices = defaultpalette, selected = defaultpalette[1],
+                multiple = TRUE)
+  })
+
+
 
     output$distPlot <- renderPlotly({
 
       yvals<-input$yvals
-      ycols<-c(input$color_1,defaultpalette)[seq_along(yvals)]
+      ycols<-names(input) %>% grep('^ycol',.,val=TRUE) %>%
+        sapply(function(ii){input[[ii]]});
       if(length(yvals) == 3) browser();
       ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
         layout(dragmode="select") %>%
