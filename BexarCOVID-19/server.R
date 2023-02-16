@@ -13,9 +13,10 @@ library(shiny)
 shinyServer(function(input, output) {
 
     output$distPlot <- renderPlotly({
-      browser();
+
       yvals<-input$yvals
       ycols<-c(input$color_1,defaultpalette)[seq_along(yvals)]
+      if(length(yvals) == 3) browser();
       ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
         layout(dragmode="select") %>%
         event_register("plotly_click")
@@ -23,3 +24,5 @@ shinyServer(function(input, output) {
     })
 
 })
+
+#Matching number of variables of colors

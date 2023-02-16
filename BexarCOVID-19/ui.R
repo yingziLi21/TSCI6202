@@ -38,11 +38,32 @@ shinyUI(fluidPage(
                         multiple = TRUE
             )
         ),
+    ),
+    selectInput("ycols",
+                "Plot Colors",
+                choices = defaultpalette,
+                selected = defaultpalette[1],
+                multiple = TRUE
+    )
+),
+    selectInput("ycols",
+            "Plot Colors",
+            choices = defaultpalette,
+            selected = defaultpalette[1],
+            multiple = TRUE
+)
+),
 
+    selectInput("ycols",
+            "Plot Colors",
+            choices = defaultpalette,
+            selected = defaultpalette[1],
+            multiple = TRUE
+)
 
         # Show a plot of the generated distribution
         mainPanel(
             plotlyOutput("distPlot")
         )
-    )
+
 ))
