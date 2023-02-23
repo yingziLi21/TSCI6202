@@ -13,25 +13,25 @@ library(shiny)
 shinyServer(function(input, output) {
   output$decol<-renderUI({
     yvals<-input$yvals
-    ylables<-paste0('ycol_',yvals)
-    browser()
     sapply(yvals,function(ii){
       colourInput(paste0("ycol_",ii),paste0(ii,"color"),
                   value = "#000000",allowTransparent = TRUE)},
-                  simplify=FALSE)
+      simplify=FALSE)
   })
 
-     output$distPlot <- renderPlotly({
 
-      yvals<-input$yvals;
-      ycols<-names(input) %>% grep('^ycol_',.,val=TRUE) %>%
-        sapply(function(ii){input[[ii]]});
-        print('beforeggplot')
-      ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
-        layout(dragmode="select") %>%
-        event_register("plotly_click")
 
-    })
+  output$distPlot <- renderPlotly({
+
+    yvals<-input$yvals
+    ycols<-names(input) %>% grep('^ycol_',.,val=TRUE) %>%
+      sapply(function(ii){input[[ii]]});
+    #if(length(yvals) == 3) browser();
+    ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
+      layout(dragmode="select") %>%
+      event_register("plotly_click")
+
+  })
 
 })
 
