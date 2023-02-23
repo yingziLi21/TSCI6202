@@ -27,6 +27,8 @@ shinyUI(fluidPage(
                         selected=names(data1)[4],
                         multiple = TRUE
                         ),
+            uiOutput('decol'),
+
             colourInput("color_1",
                         defaultpalette[1]
 
@@ -55,15 +57,15 @@ shinyUI(fluidPage(
                         choices = defaultpalette,
                         selected = defaultpalette[1],
                         multiple = TRUE
-            )
-,
-uiOutput('decol')
+            ),
+            uiOutput('decol')
     ),
 
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotlyOutput("distPlot")
+            plotlyOutput("distPlot"),
+            DT::dataTableOutput(outputId = "DT1")
         ))
 ))
 

@@ -14,19 +14,19 @@ shinyServer(function(input, output) {
   output$decol<-renderUI({
     yvals<-input$yvals
     ylables<-paste0('ycol_',yvals)
-    selectInput("ycols4", "Colors",
-                choices = defaultpalette, selected = defaultpalette[1],
-                multiple = TRUE)
+    browser()
+    sapply(yvals,function(ii){
+      colourInput(paste0("ycol_",ii),paste0(ii,"color"),
+                  value = "#000000",allowTransparent = TRUE)},
+                  simplify=FALSE)
   })
 
+     output$distPlot <- renderPlotly({
 
-
-    output$distPlot <- renderPlotly({
-
-      yvals<-input$yvals
-      ycols<-names(input) %>% grep('^ycol',.,val=TRUE) %>%
+      yvals<-input$yvals;
+      ycols<-names(input) %>% grep('^ycol_',.,val=TRUE) %>%
         sapply(function(ii){input[[ii]]});
-      if(length(yvals) == 3) browser();
+        print('beforeggplot')
       ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
         layout(dragmode="select") %>%
         event_register("plotly_click")
