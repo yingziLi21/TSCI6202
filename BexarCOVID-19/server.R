@@ -18,8 +18,25 @@ shinyServer(function(input, output) {
                   value = "#000000",allowTransparent = TRUE)},
       simplify=FALSE)
   })
-
-
+  output$DT1 <- DT::renderDataTable(
+    {
+      data1$myselection<-FALSE
+      selection<-unique(event_data("plotly_selected")$pointNumber)
+      data1$myselection[selection]<-TRUE
+      data1<-relocate(data1,myselection)
+      datatable(data1,
+              options = list(scrollX = TRUE,
+                             scrollY = "400px",
+                             scrollCollapse = TRUE,
+                             paging = FALSE,
+                             dom = 'Bfrtip',
+                             buttons = c('copy', 'csv', 'excel', 'pdf', 'print', 'colvis')
+              ),
+              selection = list(mode='multiple',target="row",
+                               selected=selection
+                               ),
+              extensions = 'Buttons',
+              filter = 'top')})
 
   output$distPlot <- renderPlotly({
 
@@ -29,10 +46,10 @@ shinyServer(function(input, output) {
     #if(length(yvals) == 3) browser();
     ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
       layout(dragmode="select") %>%
-      event_register("plotly_click")
+      event_register("plotly_selected")
 
   })
-
+  #observeEvent(event_data("plotly_selected"),{browser()})
 })
 
 #Matching number of variables of colors
