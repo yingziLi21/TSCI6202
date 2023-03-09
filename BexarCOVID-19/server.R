@@ -44,7 +44,7 @@ shinyServer(function(input, output) {
     ycols<-names(input) %>% grep('^ycol_',.,val=TRUE) %>%
       sapply(function(ii){input[[ii]]});
     #if(length(yvals) == 3) browser();
-    ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)) %>%
+    ggplotly(ggplot(data1,aes(x=reporting_date))+mapply(makegeomline,yvals,ycols)+mapply(makegeompoint,yvals)) %>%
       layout(dragmode="select") %>%
       event_register("plotly_selected")
 

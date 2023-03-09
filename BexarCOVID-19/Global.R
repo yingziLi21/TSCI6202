@@ -6,9 +6,13 @@ library(jsonlite);
 library(bslib);
 library(thematic);
 library(DT);
+makegeompoint<-function(yy){
+  #browser()
+  geom_point(aes_string(y=yy),alpha=0)
+}
 makegeomline<-function(yy,ycol){
   #browser()
-  geom_point(aes_string(y=yy),col=ycol)
+  geom_line(aes_string(y=yy),col=ycol)
 }
 if(!file.exists('cached_data.tsv')){"nonexists"
   data0<- jsonlite::fromJSON('https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/SAMHD_DailySurveillance_Data_Public/FeatureServer/0/query?where=1%3D1&outFields=*&returnGeometry=false&outSR=4326&f=json')
