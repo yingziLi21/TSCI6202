@@ -6,6 +6,7 @@ library(jsonlite);
 library(bslib);
 library(thematic);
 library(DT);
+library(crosstalk);
 makegeompoint<-function(yy){
   #browser()
   geom_point(aes_string(y=yy),alpha=0)
