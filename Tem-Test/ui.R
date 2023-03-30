@@ -1,18 +1,15 @@
 library(shiny)
-data_list<- data()$results
-data_choices<- 1:nrow(data_list) %>% setNames(data_list["Item"])
--
-ui<- fluidPage(
+shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
-      selectInput("dataset","Select a dataset", choices = data_list),
-      uiOutput("column_selection_x"),
-      uiOutput("column_selection_y")
+      selectInput("dataset","Select a dataset", choices = data_choices),
+      uiOutput("x_var"),
+      uiOutput("y_var")
     ),
     mainPanel(
       h3("Column_selection"),
       DT::DTOutput("table")
     )
   )
-)
+))
 
