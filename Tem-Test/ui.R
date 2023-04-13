@@ -8,6 +8,8 @@ library(shiny)
       uiOutput("column_selection_y")
       ),mainPanel(
       h3("column_selection"),
+      plotlyOutput("plot"),
+      textOutput("ggcode_text"),
       DT::DTOutput("table")
     ))
   )
