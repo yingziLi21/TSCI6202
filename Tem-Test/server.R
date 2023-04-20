@@ -15,7 +15,9 @@ library(ggplot2)
     req(mydata<- data_list[as.integer(input$dataset),"Item"])
     req(x_var<-input$x_var)
     req(y_var<-input$y_var)
-    sprintf("ggplot(%s,aes(x=%s,y=%s))+geom_point()",mydata,x_var,y_var)
+    req(color_var <- input$color_var, geoms <- input$geoms)
+    code<-sprintf("ggplot(%s,aes(x=%s,y=%s,col=%s))+geom_point()",mydata,x_var,y_var,color_var)
+    paste(code,'+',geoms);
   })
    output$ggcode_text<- renderText(ggcode())
 
@@ -37,10 +39,21 @@ output$column_selection_x<- renderUI({
   })
     #ggplot(dataset(),aes(x=input$x_var,y=input$y_var))
 
+    output$plot_color <- renderUI({
+      if (is.null(dataset())) return()
+      selectInput("color_var", "Plot_color", choices = names(dataset()))
+    })
+
+    observe({req(input$debug)
+      if(input$debug>0) browser()})
+
     #output$plot<- renderPlotly()
     output$table<- DT::renderDT({
-     if (is.null(dataset())||!all(c(input$x_var, input$y_var) %in% names(dataset()))) return()
-     data<- dataset()
-     DT::datatable(data[, c(input$x_var, input$y_val)])
+      req(data<- dataset(), x_var<-input$x_var, y_var<-input$y_var,
+          !all(c(x_var,y_var) %in% names(data())))
+      #browser()
+     #if (is.null(dataset())||!all(c(input$x_var, input$y_var) %in% names(dataset()))) return()
+     #data<- dataset()
+     DT::datatable(data[, c(x_var, y_var)])
    })
 }
