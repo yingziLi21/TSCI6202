@@ -3,10 +3,12 @@ library(DT)
 library(ggplot2)
 
  server<- function(input,output) {
-  dataset<- reactive({
+   # dataset ----
+   dataset<- reactive({
     selected_data<- data_list[as.integer(input$dataset),]
     #browser()
-    sprintf("data('%s', package='%s', envir = data_catch)",selected_data$Item,selected_data$Package) %>% parse(text=.) %>% eval
+    sprintf("data('%s', package='%s', envir = data_catch)",selected_data$Item,selected_data$Package) %>%
+      parse(text=.) %>% eval
     as.list(data_catch)[[selected_data$Item]]
     #as.data.frame (get(selected_data["Item"],paste0("package:", selected_data["Package"])))
   })
@@ -16,13 +18,13 @@ library(ggplot2)
     req(x_var<-input$x_var)
     req(y_var<-input$y_var)
     req(color_var <- input$color_var, geoms <- input$geoms)
-    code<-sprintf("ggplot(%s,aes(x=%s,y=%s,col=%s))+geom_point()",mydata,x_var,y_var,color_var)
+    code<-sprintf("ggplot(%s,aes(x=%s,y=%s,col=%s))",mydata,x_var,y_var,color_var)
     paste(code,'+',geoms);
   })
    output$ggcode_text<- renderText(ggcode())
 
-
-   output$plot<- renderPlotly({
+   # renderplotly ----
+   output$plot<- renderPlot({
      req(myggcode<- ggcode())
      #req(mydata<- data_list[as.integer(input$dataset),"Item"])
      parse(text=myggcode) %>% eval(envir = data_catch)
